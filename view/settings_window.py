@@ -1,7 +1,10 @@
-import dearpygui.dearpygui as dpg
-from view.base_window import BaseWindow
-import yaml
 import os
+
+import dearpygui.dearpygui as dpg
+import yaml
+
+from view.base_window import BaseWindow
+
 
 class SettingsWindow(BaseWindow):
     def __init__(self, hotkey_service):
@@ -33,19 +36,19 @@ class SettingsWindow(BaseWindow):
         action_key = dpg.get_value("action_key_input")
         delay_ms = dpg.get_value("delay_input")
 
+        new_config = {
+            'trigger_key': trigger_key,
+            'action_key': action_key,
+            'delay_ms': delay_ms
+        }
+
         # Update hotkey service
-        self.hotkey_service.config['trigger_key'] = trigger_key
-        self.hotkey_service.config['action_key'] = action_key
-        self.hotkey_service.config['delay_ms'] = delay_ms
+        self.hotkey_service.update_config(new_config)
 
         # Save to YAML
         config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config', 'settings.yaml')
         with open(config_path, 'r', encoding='utf-8') as file:
             config = yaml.safe_load(file)
-        config['hotkeys'] = {
-            'trigger_key': trigger_key,
-            'action_key': action_key,
-            'delay_ms': delay_ms
-        }
+        config['hotkeys'] = new_config
         with open(config_path, 'w', encoding='utf-8') as file:
             yaml.dump(config, file, default_flow_style=False, allow_unicode=True)

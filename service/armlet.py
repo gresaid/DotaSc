@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-import keyboard
-import yaml
+import os
 import time
 from threading import Thread, Lock
-import os
+
+import keyboard
+import yaml
 
 
 class HotkeyService:
@@ -64,3 +65,7 @@ class HotkeyService:
         finally:
             # Убеждаемся, что клавиша точно отпущена
             keyboard.release(key)
+
+    def update_config(self, new_config):
+        with self.lock:
+            self.config = new_config
