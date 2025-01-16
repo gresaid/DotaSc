@@ -1,0 +1,5 @@
+dearpygui==2.0.0
+keyboard==0.13.5
+playsound3==2.5.2
+pyperclip==1.9.0
+PyYAML==6.0.2
