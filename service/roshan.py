@@ -11,7 +11,7 @@ class RoshanTimer:
         self.remaining_time = 0
         self.timer_active = False
         self.timer_thread = None
-        self.roshan_respawn_time = 1 * 1  # 11 минут в секундах
+        self.roshan_respawn_time = 11 * 60  # 11 минут в секундах
         self.on_timer_update = None
         self.on_timer_finish = None
         self.roshan_respawn_sound_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sounds',
@@ -40,7 +40,7 @@ class RoshanTimer:
         if self.timer_active:
             minutes = self.remaining_time // 60
             seconds = self.remaining_time % 60
-            clipboard_text = u"Rosh time {:02d}:{:02d}".format(minutes, seconds)
+            clipboard_text = u"Rosh spawn after {:02d}:{:02d}".format(minutes, seconds)
             pyperclip.copy(clipboard_text)
 
     def reset_timer(self):
