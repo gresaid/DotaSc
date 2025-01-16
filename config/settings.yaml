@@ -1,0 +1,4 @@
+hotkeys:
+  action_key: '1'
+  delay_ms: 20
+  trigger_key: f
