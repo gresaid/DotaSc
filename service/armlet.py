@@ -1,10 +1,10 @@
-from playsound3 import playsound
 import os
 import time
 from threading import Thread, Lock
 
 import keyboard
 import yaml
+from playsound3 import playsound
 
 
 class HotkeyService:
@@ -17,6 +17,7 @@ class HotkeyService:
         self.is_trigger_pressed = False
         self.cooldown = 0.1  # Защитный интервал между срабатываниями в секундах
         self.enable_sound_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sounds', 'enable_sound.mp3')
+
     def _load_config(self):
         config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config', 'settings.yaml')
         with open(config_path, 'r', encoding='utf-8') as file:
