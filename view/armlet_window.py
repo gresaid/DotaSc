@@ -26,13 +26,15 @@ class ArmletWindow(BaseWindow):
                     height=40
                 )
 
-                dpg.add_text("Script is disabled", tag="autoclick_status")
+                dpg.add_text("Script is disabled", tag="autoclick_status",color=(255, 0, 0))
 
     def _toggle_autoclick(self):
         is_active = self.hotkey_service.toggle()
         if is_active:
             dpg.set_item_label("autoclick_button", "Disable Armlet Script")
             dpg.set_value("autoclick_status", "Script is enabled")
+            dpg.configure_item("autoclick_status", color=(0, 255, 0))
         else:
             dpg.set_item_label("autoclick_button", "Enable Armlet Script")
             dpg.set_value("autoclick_status", "Script is disabled")
+            dpg.configure_item("autoclick_status", color=(255, 0, 0))
