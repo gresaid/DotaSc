@@ -1,6 +1,9 @@
+import os
 import threading
 import time
+
 import pyperclip
+from playsound3 import playsound
 
 
 class RoshanTimer:
@@ -8,9 +11,11 @@ class RoshanTimer:
         self.remaining_time = 0
         self.timer_active = False
         self.timer_thread = None
-        self.roshan_respawn_time = 11 * 60  # 11 минут в секундах
+        self.roshan_respawn_time = 1 * 1  # 11 минут в секундах
         self.on_timer_update = None
         self.on_timer_finish = None
+        self.roshan_respawn_sound_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sounds',
+                                                      'roshan_respawn.mp3')
 
     def start_timer(self):
         if not self.timer_active:
@@ -29,12 +34,13 @@ class RoshanTimer:
         if self.remaining_time <= 0 and self.on_timer_finish:
             self.on_timer_finish()
             self.timer_active = False
+            self._play_roshan_respawn_sound()
 
     def copy_to_clipboard(self):
         if self.timer_active:
             minutes = self.remaining_time // 60
             seconds = self.remaining_time % 60
-            clipboard_text = u"Рошан возродится через {:02d}:{:02d}".format(minutes, seconds)
+            clipboard_text = u"Rosh time {:02d}:{:02d}".format(minutes, seconds)
             pyperclip.copy(clipboard_text)
 
     def reset_timer(self):
@@ -44,3 +50,14 @@ class RoshanTimer:
         self.remaining_time = self.roshan_respawn_time
         if self.on_timer_update:
             self.on_timer_update(self.remaining_time)
+
+    def _play_roshan_respawn_sound(self):
+        def play_sound_async():
+            try:
+                playsound(self.roshan_respawn_sound_path)
+            except Exception as e:
+                print(f"Ошибка при воспроизведении звука: {e}")
+
+        # Запуск воспроизведения звука в отдельном потоке
+        sound_thread = threading.Thread(target=play_sound_async)
+        sound_thread.start()

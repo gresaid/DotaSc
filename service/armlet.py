@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+from playsound3 import playsound
 import os
 import time
 from threading import Thread, Lock
@@ -16,7 +16,7 @@ class HotkeyService:
         self.last_trigger_time = 0
         self.is_trigger_pressed = False
         self.cooldown = 0.1  # Защитный интервал между срабатываниями в секундах
-
+        self.enable_sound_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sounds', 'enable_sound.mp3')
     def _load_config(self):
         config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config', 'settings.yaml')
         with open(config_path, 'r', encoding='utf-8') as file:
@@ -27,6 +27,7 @@ class HotkeyService:
         if self.active and not self.listener_thread:
             self.listener_thread = Thread(target=self._start_listening, daemon=True)
             self.listener_thread.start()
+        self._play_sound(self.enable_sound_path)
         return self.active
 
     def _start_listening(self):
@@ -69,3 +70,14 @@ class HotkeyService:
     def update_config(self, new_config):
         with self.lock:
             self.config = new_config
+
+    def _play_sound(self, sound_path):
+        def play_sound_async():
+            try:
+                playsound(sound_path)
+            except Exception as e:
+                print(f"Ошибка при воспроизведении звука: {e}")
+
+        # Запуск воспроизведения звука в отдельном потоке
+        sound_thread = Thread(target=play_sound_async)
+        sound_thread.start()
